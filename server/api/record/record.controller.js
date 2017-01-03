@@ -13,6 +13,8 @@
 import jsonpatch from 'fast-json-patch';
 import {Record} from '../../sqldb';
 
+import sequelize from 'sequelize';
+
 function respondWithResult(res, statusCode) {
   statusCode = statusCode || 200;
   return function(entity) {
@@ -69,6 +71,8 @@ export function index(req, res) {
     .then(respondWithResult(res))
     .catch(handleError(res));
 }
+
+
 
 // Gets a single Record from the DB
 export function show(req, res) {
@@ -129,5 +133,27 @@ export function destroy(req, res) {
   })
     .then(handleEntityNotFound(res))
     .then(removeEntity(res))
+    .catch(handleError(res));
+}
+
+
+export function colnames(req, res) {
+  var record = Record.build();
+
+  return res.status(200).json(Object.keys(record.dataValues));
+}
+
+// Gets column stats
+export function colstats(req, res) {
+  var col = req.params.colname;
+  return Record.findAll({
+    attributes: [
+      col,
+      [sequelize.fn('count', sequelize.col('age')), 'row_count'],
+      [sequelize.fn('avg', sequelize.col('age')), 'age_avg']
+    ],
+    group: [col]
+  })
+    .then(respondWithResult(res))
     .catch(handleError(res));
 }

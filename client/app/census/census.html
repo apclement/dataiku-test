@@ -1,0 +1,35 @@
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <form class="form-inline">
+        <div class="form-group">
+          <label>Variable</label>&nbsp;
+          <select class="form-control" ng-model="$ctrl.colname" ng-options="col for col in $ctrl.colnames" ng-change="$ctrl.colSelect()">
+            <option value="">--select--</option>
+          </select>
+        </div>
+      </form>
+      <br>
+
+      <table class="table table-striped">
+        <thead>
+          <tr>
+          <th>Value</th>
+          <th>Count</th>
+          <th>Average Age</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat="group in $ctrl.groups | orderBy: '-row_count'">
+            <td>{{ group[$ctrl.colname] }}</td>
+            <td>{{ group.row_count }}</td>
+            <td>{{ group.age_avg }}</td>
+          </tr>
+        </tbody>
+      </table>
+
+    </div>
+  </div>
+</div>
+<br>
+

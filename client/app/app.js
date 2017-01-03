@@ -24,11 +24,12 @@ import footer from '../components/footer/footer.component';
 import main from './main/main.component';
 import constants from './app.constants';
 import util from '../components/util/util.module';
+import census from './census/census.component';
 
 import './app.scss';
 
 angular.module('dataikuTestApp', [ngCookies, ngResource, ngSanitize, uiRouter, uiBootstrap, _Auth,
-  account, admin, navbar, footer, main, constants, util
+  account, admin, navbar, footer, main, constants, util, census
 ])
   .config(routeConfig)
   .run(function($rootScope, $location, Auth) {

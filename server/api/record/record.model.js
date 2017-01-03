@@ -76,7 +76,7 @@ export default function(sequelize, DataTypes) {
     },
     sex: {
       type: DataTypes.STRING,
-      allowNull: true,
+      allowNull: false,
       defaultValue: undefined,
       field: 'sex'
     },

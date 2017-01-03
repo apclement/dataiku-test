@@ -15,7 +15,6 @@ var db = {
 
 // Insert models below
 db.Record = db.sequelize.import('../api/record/record.model');
-db.Toto = db.sequelize.import('../api/toto/toto.model');
 db.Thing = db.sequelize.import('../api/thing/thing.model');
 db.User = db.sequelize.import('../api/user/user.model');
 
