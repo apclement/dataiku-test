@@ -10,7 +10,7 @@ module.exports = {
     uri: 'sqlite://',
     options: {
       logging: false,
-      storage: 'dev.sqlite',
+      storage: 'us-census.db',
       define: {
         timestamps: false
       }
@@ -18,6 +18,6 @@ module.exports = {
   },
 
   // Seed database on startup
-  seedDB: true
+  seedDB: false
 
 };
