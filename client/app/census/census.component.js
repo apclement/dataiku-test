@@ -14,6 +14,8 @@ export class CensusComponent {
 
   groups = [];
 
+  clipped;
+
   /*@ngInject*/
   constructor($http) {
     this.$http = $http;
@@ -29,12 +31,8 @@ export class CensusComponent {
   colSelect() {
     this.$http.get('/api/records/colstats/'+ this.colname)
       .then(response => {
-        this.groups = [];
-        angular.forEach(response.data, function(value, key) {
-          if (value[this.colname] !== null)
-            this.groups.push(value);
-        }, this);
-
+        this.groups = response.data.records;
+        this.clipped = response.data.clipped;
       });
   }
 

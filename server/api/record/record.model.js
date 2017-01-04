@@ -8,7 +8,7 @@ export default function(sequelize, DataTypes) {
       defaultValue: undefined,
       field: 'age'
     },
-    classOfWorker: {
+    'classOfWorker': {
       type: DataTypes.STRING,
       allowNull: true,
       defaultValue: undefined,

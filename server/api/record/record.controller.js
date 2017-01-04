@@ -13,7 +13,11 @@
 import jsonpatch from 'fast-json-patch';
 import {Record} from '../../sqldb';
 
-import sequelize from 'sequelize';
+import {sequelize} from '../../sqldb';
+
+import Promise from 'bluebird';
+
+import util from 'util';
 
 function respondWithResult(res, statusCode) {
   statusCode = statusCode || 200;
@@ -138,22 +142,24 @@ export function destroy(req, res) {
 
 
 export function colnames(req, res) {
-  var record = Record.build();
-
-  return res.status(200).json(Object.keys(record.dataValues));
+  return sequelize.query('PRAGMA table_info(census_learn_sql)').spread((results, metadata) => {
+    var names = results.map(it => it.name);
+    return res.status(200).json(names);
+  });
 }
 
 // Gets column stats
 export function colstats(req, res) {
   var col = req.params.colname;
-  return Record.findAll({
-    attributes: [
-      col,
-      [sequelize.fn('count', sequelize.col('age')), 'row_count'],
-      [sequelize.fn('avg', sequelize.col('age')), 'age_avg']
-    ],
-    group: [col]
-  })
-    .then(respondWithResult(res))
+  var q1 = 'SELECT ":col" as name, count(*) as row_count, avg(age) as age_avg FROM census_learn_sql WHERE name is not null GROUP BY name ORDER BY row_count DESC'.replace(/\:col/g, col);
+  var q2 = 'SELECT count(*) as skipped_count, sum(row_count) as row_count_sum FROM (:sub)'.replace(':sub', q1 + ' LIMIT -1 OFFSET 100');
+
+  return Promise.all([
+    sequelize.query(q1 + ' LIMIT 100'),
+    sequelize.query(q2)
+  ])
+    .spread( (r1, r2) => {
+       return res.status(200).json({records: r1[0], clipped: r2[0][0]});
+    })
     .catch(handleError(res));
 }

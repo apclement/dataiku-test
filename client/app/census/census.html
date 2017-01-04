@@ -11,6 +11,9 @@
       </form>
       <br>
 
+      <p><b>Number of values that were not displayed :</b> {{ $ctrl.clipped.skipped_count }}</p>
+      <p><b>Number of rows that were clipped out :</b> {{ $ctrl.clipped.row_count_sum }}</p>
+
       <table class="table table-striped">
         <thead>
           <tr>
@@ -20,8 +23,8 @@
           </tr>
         </thead>
         <tbody>
-          <tr ng-repeat="group in $ctrl.groups | orderBy: '-row_count'">
-            <td>{{ group[$ctrl.colname] }}</td>
+          <tr ng-repeat="group in $ctrl.groups">
+            <td>{{ group.name }}</td>
             <td>{{ group.row_count }}</td>
             <td>{{ group.age_avg }}</td>
           </tr>
